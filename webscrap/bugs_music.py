@@ -1,44 +1,41 @@
 from bs4 import BeautifulSoup
-from urllib.request import urlopen
+import requests
+
+
 class BugsMusic(object):
 
-    url = ''
+    url = 'https://music.bugs.co.kr/chart/track/realtime/total?'
+    headers = {'User-Agent': 'Mozilla/5.0'}
     class_name = []
 
-    def __str__(self):
-        return self.url
+    def set_url(self, detail):
+        self.url = requests.get(f'{self.url}{detail}', headers=self.headers).text
 
-    def scrap(self):
-        soup = BeautifulSoup(urlopen(self.url), 'lxml')
-        print('---------------- ARTIST RANKING ------------------')
+    def get_ranking(self):
+        soup = BeautifulSoup(self.url, 'lxml')
+        print('------- 제목 --------')
+        ls = soup.find_all(name='p', attrs=({"class": self.class_name[1]}))
+        for i in ls:
+            print(f' {i.find("a").text}')
+        print('------ 가수 --------')
+        ls = soup.find_all(name='p', attrs=({"class": self.class_name[0]}))
+        for i in ls:
+            print(f'{i.find("a").text}')
 
-        count = 0
-        for i in soup.find_all(name='p', attrs=({"class": self.class_name[0]})):
-            count += 1
-            print(f'{str(count)} RANKING')
-            print(f'artist: {i.find("a").text}')
 
-        print('---------------- TITLE RANKING -----------------')
-        count = 0
-        for i in soup.find_all(name='p', attrs=({"class": self.class_name[1]})):
-            count += 1
-            print(f'{str(count)} RANKING')
-            print(f'title: {i.find("a").text}')
-
-# https://music.bugs.co.kr/chart/track/realtime/total?wl_ref=M_contents_03_01
     @staticmethod
     def main():
         bugs = BugsMusic()
         while 1:
-            menu = int(input('0.Exit\n 1.Input URL\n 2.Get Ranking \n 3.'))
-            if menu == 0:
+            menu = input('0-exit, 1-input time, 2-output')
+            if menu == '0':
                 break
-            elif menu == 1:
-                bugs.url = input('Input URL')
-            elif menu == 2:
+            elif menu == '1':
+                bugs.set_url(input('상세정보 입력')) # wl_ref=M_contents_03_01
+            elif menu == '2':
                 bugs.class_name.append("artist")
                 bugs.class_name.append("title")
-                bugs.scrap()
+                bugs.get_ranking()
             else:
                 print('Wrong Number')
                 continue
