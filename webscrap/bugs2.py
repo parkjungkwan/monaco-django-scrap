@@ -19,10 +19,12 @@ class Bugs2(object):
         html = urllib.request.urlopen(req).read()
         soup = BeautifulSoup(html, 'html.parser')
         print('------- 제목 --------')
-        for i in soup.find_all("div", {"class": self.class_name[0]}):
+        ls = soup.find_all("div", {"class": self.class_name[0]})
+        for i in ls:
             print(f' {i.find("a").text}')
         print('------ 가수 --------')
-        for i in soup.find_all("div", {"class": self.class_name[1]}):
+        ls = soup.find_all("div", {"class": self.class_name[1]})
+        for i in ls:
             print(f' {i.find("a").text}')
 
 
