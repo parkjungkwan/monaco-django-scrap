@@ -7,6 +7,8 @@ class BugsMusic(object):
     url = 'https://music.bugs.co.kr/chart/track/realtime/total?'
     headers = {'User-Agent': 'Mozilla/5.0'}
     class_name = []
+    title_dict = {}
+
 
     def set_url(self, detail):
         self.url = requests.get(f'{self.url}{detail}', headers=self.headers).text
@@ -21,6 +23,14 @@ class BugsMusic(object):
         ls = soup.find_all(name='p', attrs=({"class": self.class_name[0]}))
         for i in ls:
             print(f'{i.find("a").text}')
+
+    def insert_title_dict(self):
+        soup = BeautifulSoup(self.url, 'lxml')
+        print('------- 제목 --------')
+        ls = soup.find_all(name='p', attrs=({"class": self.class_name[1]}))
+        for i in ls:
+            pass
+        print(self.title_dict)
 
 
     @staticmethod
