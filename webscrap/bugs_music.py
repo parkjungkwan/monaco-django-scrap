@@ -33,7 +33,7 @@ class BugsMusic(object):
             self.title_dict[i] = j
         # 방법 3. enumerate
         for i, j in enumerate(self.title_ls):
-            self.dict[self.title_ls[j]] = self.artist_ls[i]
+            self.dict[j] = self.artist_ls[i]
 
         print(dict)
 
