@@ -6,15 +6,17 @@
 
 class Gugudan(object):
 
-    dan = 0
-    dict = {}
+    dan = 0.
+    dict = ''.join()
 
     def print_selected_dan(self):
         for i in range(1, 10):
             print(f'{self.dan} * {i} = {self.dan * i}')
 
     def print_all_dan(self):
-        pass
+        for i in range(2, 10):
+            for j in range(1, 10):
+                print(f'{i} * {j} = { i * j}')
 
     def print_dict_dan(self):
         d = self.dict
