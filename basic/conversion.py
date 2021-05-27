@@ -22,7 +22,7 @@ class Conversion(object):
 
     @staticmethod
     def list_to_dictionary(ls) -> {}:
-        return dict(zip(ls,ls))
+        return dict(zip([str(i) for i in ls], ls))
 
     @staticmethod
     def hello_to_tuple(st) -> ():
@@ -34,18 +34,13 @@ class Conversion(object):
 
     @staticmethod
     def dictionary_to_dataframe(dt) -> object:
-        df_src ={}
-        for k, v in dt.items():
-            df_src[k] = list((v, ))
-        return pd.DataFrame(df_src)
+        return pd.DataFrame.from_dict(dt, orient='index')
 
     @staticmethod
     def main():
         c = Conversion()
         tp = ()
         ls = []
-        dt = {}
-        df = pd.DataFrame({})
         while 1:
             m = input('0-exit 1-create tuple\n'
                       '2-convert list\n'
@@ -93,8 +88,13 @@ class Conversion(object):
                 print(ls)
             # 5번 딕셔너리를 데이터프레임 으로 전환하시오
             elif m == '8':
+                tp = c.create_tuple()
+                ls = c.tuple_to_list(tp)
+                dt = c.list_to_dictionary(ls)
+                print(dt)
                 df = c.dictionary_to_dataframe(dt)
                 print(f'df의 타입 : {type(df)}')
+                # If using all scalar values, you must pass an index
                 print(df)
 
             else:
