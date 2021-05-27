@@ -48,7 +48,8 @@ class Conversion(object):
                       '4-convert int-list\n'
                       '5-list convert dictionary\n'
                       '6-str convert tuple\n'
-                      '7-str tuple convert list')
+                      '7-str tuple convert list\n'
+                      '8-dictionary to dataframe')
             if m == '0':
                 break
             # 1부터 9까지 요소를 가진 튜플을 생성하시오 (return)
