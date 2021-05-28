@@ -41,7 +41,7 @@ class BugsMusic(object):
 
     def dict_to_dataframe(self):
         dt = self.dict
-        self.df = pd.DataFrame.from_dict(dt, orient='index')
+        self.df = pd.DataFrame.from_dict(self.dict, orient='index')
         print(self.df)
 
     def df_to_csv(self):
