@@ -1,6 +1,7 @@
 from titanic.models.dataset import Dataset
 import pandas as pd
 
+
 class Service(object):
 
     dataset = Dataset()

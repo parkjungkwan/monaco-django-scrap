@@ -8,10 +8,7 @@ class Test(object):
     service: object = Service()
 
     def __init__(self, fname):
-        service = self.service
-        self.dataset.context = './data/'
-        self.dataset.fname = fname
-        self.entity = service.new_model(fname)
+        self.entity = self.service.new_model(fname)
 
     def plot(self):
         this = self.entity
