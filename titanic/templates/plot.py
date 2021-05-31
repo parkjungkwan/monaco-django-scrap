@@ -54,8 +54,6 @@ class Plot(object):
         sns.countplot(data=this, x='승선항구', hue='생존결과')
         plt.show()
 
-
-
 '''
 The data type of Train is <class 'pandas.core.frame.DataFrame'>.
 Columns of Train is Index(['PassengerId', 'Survived', 'Pclass', 'Name', 'Sex', 'Age', 'SibSp',
