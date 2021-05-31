@@ -7,10 +7,10 @@ class Controller(object):
     dataset = Dataset()
     service = Service()
 
-    def modeling(self, train, test) -> object:
+    def modeling(self, train, test):
         service = self.service
 
-    def preprocess(self, train) -> object:
+    def preprocess(self, train):
         service = self.service
         this = self.dataset
         this.train = service.new_model(train)

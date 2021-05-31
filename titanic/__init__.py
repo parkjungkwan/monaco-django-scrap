@@ -1,9 +1,7 @@
 from titanic.views.controller import Controller
-from titanic.views.test import Test
+from titanic.templates.plot import Plot
 
 if __name__ == '__main__':
-    controller = Controller()
-
     while 1:
         menu = input('0-exit 1-data visualization\n'
                      ' 2-modeling\n'
@@ -12,8 +10,8 @@ if __name__ == '__main__':
         if menu == '0':
             break
         elif menu == '1':
-            test = Test('train.csv')
-            test.plot()
+            plot = Plot('train.csv')
+            plot.draw_survived_dead()
         elif menu == '2':
             pass
         elif menu == '3':
