@@ -44,10 +44,28 @@ class Service(object):
 
     @staticmethod
     def title_norminal(this) -> object:
+        combine = [this.train, this.test]
+        for dataset in combine:
+            dataset['Title'] = dataset.Name.str.extract('([A-Za-z]+)\.', expand=False)
+        for dataset in combine:
+            dataset['Title'] = dataset['Title'].replace(['Capt', 'Col', 'Don', 'Dr', 'Major', 'Rev', 'Jonkheer', 'Dona'], 'Rare')
+            dataset['Title'] = dataset['Title'].replace(['Countess', 'Lady', 'Sir'], 'Royal')
+            dataset['Title'] = dataset['Title'].replace('Mlle', 'Mr')
+            dataset['Title'] = dataset['Title'].replace('Ms', 'Miss')
+            dataset['Title'] = dataset['Title'].replace('Mme', 'Rare')
+            title_mapping = {'Mr': 1, 'Miss': 2, 'Mrs': 3, 'Master': 4, 'Royal': 5, 'Rare': 6}
+            dataset['Title'] = dataset['Title'].fillna(0)
+            dataset['Title'] = dataset['Title'].map(title_mapping)
         return this
 
     @staticmethod
     def gender_norminal(this) -> object:
+        combine = [this.train, this.test]
+        gender_mapping = {'male': 0, 'female': 1}
+        for i in combine:
+            i['Gender'] = i['Sex'].map(gender_mapping)
+        this.train = combine[0]
+        this.test = combine[1]
         return this
 
     @staticmethod
