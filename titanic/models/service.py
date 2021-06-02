@@ -37,16 +37,20 @@ class Service(object):
 
     @staticmethod
     def fare_ordinal(this) -> object:
-        return this
-
-    @staticmethod
-    def fare_band_fill_na(this) -> object:
+        this.test['Fare'].fillna(1)
+        this.train['FareBand'] = pd.qcut(this.train['Fare'], 4)
+        # quct 으로 bins 값 설정 {this.train["FareBand"].head(10)}
+        # bins = list(pd.qcut(this.train['Fare'], 4, retbins=True))
+        bins = [-1, 8, 15, 31, np.inf]
+        this.train = this.train.drop(['FareBand'], axis=1)
+        for these in this.train, this.test:
+            these['FareBand'] = pd.cut(these['Fare'], bins=bins, labels=[1,2,3,4])  # {[labels]:[bins]}
         return this
 
     @staticmethod
     def title_norminal(this) -> object:
-        combine = [this.train, this.test]
-        for dataset in combine:
+        combine = []
+        for dataset in this.train, this.test:
             dataset['Title'] = dataset.Name.str.extract('([A-Za-z]+)\.', expand=False)
         for dataset in combine:
             dataset['Title'] = dataset['Title'].replace(['Capt', 'Col', 'Don', 'Dr', 'Major', 'Rev', 'Jonkheer', 'Dona'], 'Rare')
@@ -61,10 +65,9 @@ class Service(object):
 
     @staticmethod
     def gender_norminal(this) -> object:
-        combine = [this.train, this.test]
         gender_mapping = {'male': 0, 'female': 1}
-        for i in combine:
-            i['Gender'] = i['Sex'].map(gender_mapping)
+        for these in [this.train, this.test]:
+            these['Gender'] = these['Sex'].map(gender_mapping)
         return this
 
     @staticmethod
@@ -75,10 +78,10 @@ class Service(object):
         test['Age'] = test['Age'].fillna(-0.5)
         bins = [-1, 0, 5, 12, 18, 24, 35, 60, np.inf]
         labels = ['Unknown', 'Baby', 'Child', 'Teenager', 'Student', 'Young Adult', 'Adult', 'Senior']
-        age_title_mapping = {0: 'Unknown', 1: 'Baby', 2: 'Child', 3: 'Teenager', 4: 'Student', 5: 'Young Adult',
-                             6: 'Adult', 7: 'Senior'}
+        age_title_mapping = {'Unknown':0 , 'Baby': 1, 'Child': 2, 'Teenager' : 3, 'Student': 4, 'Young Adult': 5,
+                             'Adult':6,  'Senior': 7}
         for i in train, test:
-            i['AgeGroup'] = pd.cut(i['Age'], bins=bins, labels=labels)
+            i['AgeGroup'] = pd.cut(i['Age'], bins=bins, labels=labels) # {[labels]:[bins]}
             i['AgeGroup'] = i['AgeGroup'].map(age_title_mapping)
 
         return this
