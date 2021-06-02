@@ -39,7 +39,7 @@ class Dataset(object):
     @property
     def id(self) -> str: return self._id
 
-    @context.setter
+    @id.setter
     def id(self, id): self._id = id
 
     @property

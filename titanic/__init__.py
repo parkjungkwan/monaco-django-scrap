@@ -21,6 +21,6 @@ if __name__ == '__main__':
         elif menu == '3':
             controller.learning(df)
         elif menu == '4':
-            controller.submit(df)
+            controller.submit('train.csv','test.csv')
         else:
             continue
