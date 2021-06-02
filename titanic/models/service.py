@@ -37,7 +37,8 @@ class Service(object):
 
     @staticmethod
     def fare_ordinal(this) -> object:
-        this.test['Fare'].fillna(1)
+        this.test['Fare'] = this.test['Fare'].fillna(1)
+        print(f' Test 의 null {this.test[this.test.isna().any(axis=1)]}')
         this.train['FareBand'] = pd.qcut(this.train['Fare'], 4)
         # quct 으로 bins 값 설정 {this.train["FareBand"].head(10)}
         # bins = list(pd.qcut(this.train['Fare'], 4, retbins=True))
@@ -45,12 +46,13 @@ class Service(object):
         this.train = this.train.drop(['FareBand'], axis=1)
         for these in this.train, this.test:
             these['FareBand'] = pd.cut(these['Fare'], bins=bins, labels=[1,2,3,4])  # {[labels]:[bins]}
+
         return this
 
     @staticmethod
     def title_norminal(this) -> object:
-        combine = []
-        for dataset in this.train, this.test:
+        combine = [this.train, this.test]
+        for dataset in combine:
             dataset['Title'] = dataset.Name.str.extract('([A-Za-z]+)\.', expand=False)
         for dataset in combine:
             dataset['Title'] = dataset['Title'].replace(['Capt', 'Col', 'Don', 'Dr', 'Major', 'Rev', 'Jonkheer', 'Dona'], 'Rare')

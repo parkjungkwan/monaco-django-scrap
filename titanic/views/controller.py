@@ -24,7 +24,7 @@ class Controller(object):
         this = service.gender_norminal(this)
         this = service.age_ordinal(this)
         this = service.fare_ordinal(this)
-        this = service.drop_feature(this, 'Name', 'Sex', 'Cabin', 'Ticket', 'Fare')
+        this = service.drop_feature(this, 'Name', 'Sex', 'Cabin', 'Ticket', 'Age', 'Fare')
         self.print_this(this)
         return this
 
