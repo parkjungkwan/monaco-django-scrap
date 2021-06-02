@@ -1,6 +1,10 @@
 from titanic.models.dataset import Dataset
 import pandas as pd
 import numpy as np
+from sklearn.svm import SVC
+from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score
+from sklearn.ensemble import RandomForestClassifier
 
 class Service(object):
 
@@ -38,17 +42,12 @@ class Service(object):
     @staticmethod
     def fare_ordinal(this) -> object:
         this.test['Fare'] = this.test['Fare'].fillna(1)
-        print(f' Test 의 null {this.test[this.test.isna().any(axis=1)]}')
         this.train['FareBand'] = pd.qcut(this.train['Fare'], 4)
-        # quct 으로 bins 값 설정 {this.train["FareBand"].head(10)}
-        # bins = list(pd.qcut(this.train['Fare'], 4, retbins=True))
-        # 은 list 구조로 첫번째 인덱스는 str 타입의 문자이고 2번째 인덱스가 구간 값이다.
-        # 그래서 [1] 을 주고 bins 로 처리한다.
-        bins = list(pd.qcut(this.train['Fare'], 4, retbins=True))[1]
+        # print(f'qcut 으로 bins 값 설정 {this.train["FareBand"].head()}')
+        bins = [-1, 8, 15, 31, np.inf]
         this.train = this.train.drop(['FareBand'], axis=1)
-        for these in this.train, this.test:
-            these['FareBand'] = pd.cut(these['Fare'], bins=bins, labels=[1,2,3,4])  # {[labels]:[bins]}
-
+        for these in [this.train, this.test]:
+            these['FareBand'] = pd.cut(these['Fare'], bins=bins, labels=[1, 2, 3, 4])
         return this
 
     @staticmethod
@@ -91,8 +90,25 @@ class Service(object):
         return this
 
     @staticmethod
-    def create_k_fold(this) -> object:
-        return
+    def create_k_fold() -> object:
+        return KFold(n_splits=10, shuffle=True, random_state=0)
+
+    @staticmethod
+    def accuracy_by_svm(this):
+        print(f'10. Train 의 type \n {type(this.train)} ')
+        print(f'11. Train 의 column \n {this.train.columns} ')
+        print(f'12. Train 의 상위 1개 행\n {this.train.head()} ')
+        print(f'13. Train 의 null 의 갯수\n {this.train.isnull().sum()}개')
+        print(f'14. label \n {type(this.label)}')
+        score = cross_val_score(RandomForestClassifier(),
+                                this.train,
+                                this.label,
+                                cv=KFold(n_splits=10,
+                                         shuffle=True,
+                                         random_state=0),
+                                n_jobs=1,
+                                scoring='accuracy')
+        return round(np.mean(score) * 100, 2)
 
 
 

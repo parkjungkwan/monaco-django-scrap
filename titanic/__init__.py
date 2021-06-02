@@ -19,8 +19,8 @@ if __name__ == '__main__':
         elif menu == '2':
             df = controller.modeling('train.csv','test.csv')
         elif menu == '3':
-            pass
+            controller.learning(df)
         elif menu == '4':
-            pass
+            controller.submit(df)
         else:
             continue
