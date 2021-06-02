@@ -42,7 +42,9 @@ class Service(object):
         this.train['FareBand'] = pd.qcut(this.train['Fare'], 4)
         # quct 으로 bins 값 설정 {this.train["FareBand"].head(10)}
         # bins = list(pd.qcut(this.train['Fare'], 4, retbins=True))
-        bins = [-1, 8, 15, 31, np.inf]
+        # 은 list 구조로 첫번째 인덱스는 str 타입의 문자이고 2번째 인덱스가 구간 값이다.
+        # 그래서 [1] 을 주고 bins 로 처리한다.
+        bins = list(pd.qcut(this.train['Fare'], 4, retbins=True))[1]
         this.train = this.train.drop(['FareBand'], axis=1)
         for these in this.train, this.test:
             these['FareBand'] = pd.cut(these['Fare'], bins=bins, labels=[1,2,3,4])  # {[labels]:[bins]}
