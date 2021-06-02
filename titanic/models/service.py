@@ -1,6 +1,6 @@
 from titanic.models.dataset import Dataset
 import pandas as pd
-
+import numpy as np
 
 class Service(object):
 
@@ -21,9 +21,10 @@ class Service(object):
         return this.train['Survived']
 
     @staticmethod
-    def drop_feature(this, feature) -> object:
-        this.train = this.train.drop([feature], axis = 1)
-        this.test = this.test.drop([feature], axis=1)
+    def drop_feature(this, *feature) -> object:
+        for i in feature:
+            this.train = this.train.drop([i], axis=1)
+            this.test = this.test.drop([i], axis=1)
         return this
 
     @staticmethod
@@ -64,12 +65,22 @@ class Service(object):
         gender_mapping = {'male': 0, 'female': 1}
         for i in combine:
             i['Gender'] = i['Sex'].map(gender_mapping)
-        this.train = combine[0]
-        this.test = combine[1]
         return this
 
     @staticmethod
     def age_ordinal(this) -> object:
+        train = this.train
+        test = this.test
+        train['Age'] = train['Age'].fillna(-0.5)
+        test['Age'] = test['Age'].fillna(-0.5)
+        bins = [-1, 0, 5, 12, 18, 24, 35, 60, np.inf]
+        labels = ['Unknown', 'Baby', 'Child', 'Teenager', 'Student', 'Young Adult', 'Adult', 'Senior']
+        age_title_mapping = {0: 'Unknown', 1: 'Baby', 2: 'Child', 3: 'Teenager', 4: 'Student', 5: 'Young Adult',
+                             6: 'Adult', 7: 'Senior'}
+        for i in train, test:
+            i['AgeGroup'] = pd.cut(i['Age'], bins=bins, labels=labels)
+            i['AgeGroup'] = i['AgeGroup'].map(age_title_mapping)
+
         return this
 
     @staticmethod
